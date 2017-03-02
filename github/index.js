@@ -6,10 +6,12 @@ module.exports = function (context, req) {
   if (!referer) {
     context.log('No "Referer" in header');
 
-    return context.done(null, {
+    context.res = {
       status: 400,
       body: 'Please add this link to README.md in your GitHub'
-    });
+    };
+
+    return context.done();
   }
 
   context.log(`Got "Referer" in header: ${ referer }`);
@@ -19,10 +21,12 @@ module.exports = function (context, req) {
   if (!match) {
     context.log('Not a GitHub referer');
 
-    return context.done(null, {
+    context.res = {
       status: 400,
       body: 'You can only put this link in a GitHub repository'
-    });
+    };
+
+    return context.done();
   }
 
   const [account, repository, _, ref] = match;
@@ -35,10 +39,12 @@ module.exports = function (context, req) {
 
   context.log(`Template URL: ${ urlToJSON }`);
 
-  return context.done(null, {
+  context.res = {
     status: 302,
     headers: {
       location: `https://portal.azure.com/#create/Microsoft.Template/uri/${ encodeURI(urlToJSON) }`
     }
-  });
+  };
+
+  context.done();
 };
