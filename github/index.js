@@ -31,7 +31,7 @@ module.exports = function (context, req) {
   context.log(`Repository: ${ repository }`);
   context.log(`Ref: ${ ref }`);
 
-  const urlToJSON = `https://raw.githubusercontent.com/${ account }/${ repository }/tree/${ ref || 'master' }/azuredeploy.json`);
+  const urlToJSON = `https://raw.githubusercontent.com/${ account }/${ repository }/tree/${ ref || 'master' }/azuredeploy.json`;
 
   context.log(`Template URL: ${ urlToJSON }`);
 
