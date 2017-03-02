@@ -1,4 +1,4 @@
-const githubUrlPattern = /^https:\/\/github.com\/([^\/]+)\/([^\/]+)(\/tree\/([^\/]+))?/;
+const githubUrlPattern = /^https:\/\/github.com\/([^\/]+)\/([^\/]+)(\/[^\/]+)?/;
 
 module.exports = function (context, req) {
   const referer = req.headers.referer;
@@ -29,13 +29,13 @@ module.exports = function (context, req) {
     return context.done();
   }
 
-  const [, account, repository,, ref] = match;
+  const [, account, repository, ref] = match;
 
   context.log(`GitHub account: ${ account }`);
   context.log(`Repository    : ${ repository }`);
   context.log(`Ref           : ${ ref }`);
 
-  const urlToJSON = `https://raw.githubusercontent.com/${ account }/${ repository }/tree/${ ref || 'master' }/azuredeploy.json`;
+  const urlToJSON = `https://raw.githubusercontent.com/${ account }/${ repository }/${ ref || 'master' }/azuredeploy.json`;
 
   context.log(`Redirect URL  : ${ urlToJSON }`);
 
