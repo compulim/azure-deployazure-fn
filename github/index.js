@@ -29,7 +29,7 @@ module.exports = function (context, req) {
     return context.done();
   }
 
-  const [account, repository, _, ref] = match;
+  const [, account, repository,, ref] = match;
 
   context.log(`GitHub account: ${ account }`);
   context.log(`Repository: ${ repository }`);
