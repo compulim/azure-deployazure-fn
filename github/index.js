@@ -32,18 +32,19 @@ module.exports = function (context, req) {
   const [, account, repository,, ref] = match;
 
   context.log(`GitHub account: ${ account }`);
-  context.log(`Repository: ${ repository }`);
-  context.log(`Ref: ${ ref }`);
+  context.log(`Repository    : ${ repository }`);
+  context.log(`Ref           : ${ ref }`);
 
   const urlToJSON = `https://raw.githubusercontent.com/${ account }/${ repository }/tree/${ ref || 'master' }/azuredeploy.json`;
 
-  context.log(`Template URL: ${ urlToJSON }`);
+  context.log(`Redirect URL  : ${ urlToJSON }`);
 
   context.res = {
     status: 302,
     headers: {
-      location: `https://portal.azure.com/#create/Microsoft.Template/uri/${ encodeURI(urlToJSON) }`
-    }
+      location: `https://portal.azure.com/#create/Microsoft.Template/uri/${ encodeURIComponent(urlToJSON) }`
+    },
+    body: null
   };
 
   context.done();
