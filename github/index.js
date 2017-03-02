@@ -1,17 +1,32 @@
-module.exports = function (context, req) {
-  context.log('JavaScript HTTP trigger function processed a request.');
+const githubUrlPattern = /^https:\/\/github.com\/([^\/]+)\/([^\/]+)(\/tree\/([^\/]+))?/;
 
-  if (req.query.name || (req.body && req.body.name)) {
-    res = {
-      // status: 200, /* Defaults to 200 */
-      body: "Hello " + (req.query.name || req.body.name)
-    };
+module.exports = function (context, req) {
+  const referer = req.headers.Referer;
+
+  if (!referer) {
+    context.log('No "Referer" in header');
+
+    return context.done(null, {
+      status: 404,
+      body: 'Please add this link to README.md in your GitHub'
+    });
   }
-  else {
-    res = {
-      status: 400,
-      body: "Please pass a name on the query string or in the request body"
-    };
+
+  context.log(`Got "Referer" in header: ${ referer }`);
+
+  const match = githubUrlPattern.exec(referer);
+
+  if (!match) {
+    context.log('Not a GitHub referer');
+
+    return context.done(null, {
+      status: 404,
+      body: 'You can only put this link in a GitHub repository'
+    });
   }
-  context.done(null, res);
+
+  return context.done(null, {
+    status: 200,
+    body: 'Hello, World!'
+  });
 };
